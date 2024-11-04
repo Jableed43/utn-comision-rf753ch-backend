@@ -1,3 +1,4 @@
+import { Animal } from "./Animal";
 import { Person } from "./Person";
 
 //Creamos subclase
@@ -5,9 +6,9 @@ import { Person } from "./Person";
 // podemos añadir atributos/metodos nuevos, si queremos
 // Todo el contenido de la superclase se hereda aunque no este visible
 export class Owner extends Person {
-  public mascota: string;
+  public mascota: Animal;
 
-  constructor(nombre: string, edad: number, fechaNac: Date, mascota: string) {
+  constructor(nombre: string, edad: number, fechaNac: Date, mascota: Animal) {
     //Dentro de super() ponemos las propiedades heredadas
     //De esta forma, se asignan los valores a las variables internas
     super(nombre, edad, fechaNac);
