@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { PORT } from "./config.js";
 import { connectDB } from "./db.js";
+import userRoute from "./routes/userRoute.js";
 
 //Ejecucion de express
 const app = express();
@@ -16,6 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Conexion a la base de datos
 connectDB();
+
+//Rutas
+//  http://localhost:3000/api/user
+app.use("/api/user", userRoute);
 
 //Siempre tiene que ir ultimo
 app.listen(PORT, () => {
