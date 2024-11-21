@@ -1,5 +1,10 @@
 import express from "express";
-import { create, get } from "../controllers/userController.js";
+import {
+  createUser,
+  deleteUser,
+  getUsers,
+  updateUser,
+} from "../controllers/userController.js";
 
 //Crear enrutador
 //Enrutador, controla un conjunto de rutas
@@ -11,7 +16,10 @@ const userRoute = express.Router();
 
 //Endpoints
 //Ruta de creacion con post
-userRoute.post("/create", create);
-userRoute.get("/get", get);
+userRoute.post("/create", createUser);
+userRoute.get("/get", getUsers);
+//Definimos path param con ":id"
+userRoute.delete("/delete/:id", deleteUser);
+userRoute.put("/update/:id", updateUser);
 
 export default userRoute;

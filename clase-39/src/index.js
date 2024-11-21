@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import { PORT } from "./config.js";
 import { connectDB } from "./db.js";
 import userRoute from "./routes/userRoute.js";
+import categoryRoute from "./routes/categoryRoute.js";
 
 //Ejecucion de express
 const app = express();
@@ -21,6 +22,7 @@ connectDB();
 //Rutas
 //  http://localhost:3000/api/user
 app.use("/api/user", userRoute);
+app.use("/api/category", categoryRoute);
 
 //Siempre tiene que ir ultimo
 app.listen(PORT, () => {
