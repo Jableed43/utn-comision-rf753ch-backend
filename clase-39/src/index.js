@@ -4,6 +4,7 @@ import { PORT } from "./config.js";
 import { connectDB } from "./db.js";
 import userRoute from "./routes/userRoute.js";
 import categoryRoute from "./routes/categoryRoute.js";
+import productRoute from "./routes/productRoute.js";
 
 //Ejecucion de express
 const app = express();
@@ -23,6 +24,7 @@ connectDB();
 //  http://localhost:3000/api/user
 app.use("/api/user", userRoute);
 app.use("/api/category", categoryRoute);
+app.use("/api/product", productRoute);
 
 //Siempre tiene que ir ultimo
 app.listen(PORT, () => {
