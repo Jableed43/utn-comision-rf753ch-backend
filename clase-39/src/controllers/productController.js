@@ -62,3 +62,38 @@ export const findProductById = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+
+export const updateProduct = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const productExist = await Product.findOne({ _id })
+    if(!productExist){
+      return res.status(400).json({ message: "User you're trying to update does not exist" })
+    }
+
+    const updateProduct = await Product.findByIdAndUpdate({ _id }, req.body, {new: true})
+
+    // const updateProduct = await Product.updateOne( {_id}, req.body, {new: true} )
+
+    res.status(201).json(updateProduct)
+
+  } catch (error) {
+    res.status(500).json({ message: "internal server error", error })
+  }
+}
+
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const productExist = await Product.findOne({ _id: id });
+    if (!productExist) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    await Product.findByIdAndDelete(id);
+    res.status(201).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error", error });
+  }
+};

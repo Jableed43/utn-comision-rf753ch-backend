@@ -1,5 +1,7 @@
 import Category from "../models/categoryModel.js";
 
+//Ver de añadir varias category a la vez
+
 export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find();

@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import bcrypt from "bcrypt"
 
 //Controladores: Actua como intermediario entre el cliente y la logica de la aplicacion. Recibe solicitudes, las procesa y devuelve la respuesta.
 //Estos controladores incluyen a los servicios
@@ -10,7 +11,7 @@ export const createUser = async (req, res) => {
     const userData = new User(req.body);
 
     //Destructuramos y obtenemos el email
-    const { email } = userData;
+    const { email, password } = userData;
 
     //Validar que el email no sea repetido
     const userExist = await User.findOne({ email });
@@ -21,6 +22,8 @@ export const createUser = async (req, res) => {
         .status(400)
         .json({ message: `User with email: ${email} already exists` });
     }
+
+    // const hashedPassword = bcrypt.hashSync(password, 10)
 
     //Si el email no existe, guardamos el usuario en la db
     await userData.save();
@@ -87,3 +90,22 @@ export const updateUser = async (req, res) => {
     return res.status(500).json({ error: "internal server error", error });
   }
 };
+
+export const validate = async (req, res) => {
+  try {
+    const userFound = await User.findOne({ email: req.body.email })
+
+    if(!userFound){
+      res.status(400).json({ message: "User or password is incorrect" })  
+    }
+
+    //Comparar la password que llega del body contra la guardada en la db
+   if(bcrypt.compareSync(req.body.password, userFound.password)){
+     return res.status(200).json({ message: "Logged in" })
+   } else {
+    return res.status(400).json({ message: "User or password is incorrect" })
+   }
+  } catch (error) {
+    return res.status(500).json({ error: "internal server error", error });
+  }
+}

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { isGoodPassword } from "../utils/validators.js";
+import bcrypt from "bcrypt"
 
 //Faltaria encriptacion y categoria de usuario
 
@@ -57,5 +58,13 @@ const userSchema = new mongoose.Schema({
     },
   },
 });
+
+userSchema.pre("save", function (next) {
+  //encriptamos la password antes de guardarla
+  this.password = bcrypt.hashSync(this.password, 10)
+  //Esta funcion next permite dar el proximo paso si el proceso ha salido bien
+  //de lo contrario retorna un error
+  next()
+})
 
 export default mongoose.model("user", userSchema);

@@ -4,6 +4,7 @@ import {
   deleteUser,
   getUsers,
   updateUser,
+  validate,
 } from "../controllers/userController.js";
 
 //Crear enrutador
@@ -21,5 +22,6 @@ userRoute.get("/get", getUsers);
 //Definimos path param con ":id"
 userRoute.delete("/delete/:id", deleteUser);
 userRoute.put("/update/:id", updateUser);
+userRoute.post("/login", validate)
 
 export default userRoute;
