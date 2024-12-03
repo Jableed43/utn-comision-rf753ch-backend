@@ -4,11 +4,12 @@ import {
   deleteCategory,
   getCategories,
 } from "../controllers/categoryController.js";
+import { verifyTokenMiddleware } from "../middlewares/verifyTokenMiddleware.js";
 
 const categoryRoute = Router();
 
-categoryRoute.get("/get", getCategories);
-categoryRoute.post("/create", createCategory);
-categoryRoute.delete("/delete/:id", deleteCategory);
+categoryRoute.get("/get", verifyTokenMiddleware, getCategories);
+categoryRoute.post("/create", verifyTokenMiddleware, createCategory);
+categoryRoute.delete("/delete/:id", verifyTokenMiddleware, deleteCategory);
 
 export default categoryRoute;

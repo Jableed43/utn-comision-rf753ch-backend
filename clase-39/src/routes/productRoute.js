@@ -7,15 +7,16 @@ import {
   getProducts,
   updateProduct,
 } from "../controllers/productController.js";
+import { verifyTokenMiddleware } from "../middlewares/verifyTokenMiddleware.js";
 
 const productRoute = Router();
 
-productRoute.get("/get", getProducts);
-productRoute.post("/create", createProduct);
-productRoute.get("/get-by-id/:id", findProductById);
-productRoute.post("/get-by-name", findProductByName);
-productRoute.put("/update/:id", updateProduct)
-productRoute.delete("/delete/:id", deleteProduct)
+productRoute.get("/get", verifyTokenMiddleware, getProducts);
+productRoute.post("/create", verifyTokenMiddleware, createProduct);
+productRoute.get("/get-by-id/:id", verifyTokenMiddleware, findProductById);
+productRoute.post("/get-by-name", verifyTokenMiddleware, findProductByName);
+productRoute.put("/update/:id", verifyTokenMiddleware, updateProduct)
+productRoute.delete("/delete/:id", verifyTokenMiddleware, deleteProduct)
 
 
 export default productRoute;

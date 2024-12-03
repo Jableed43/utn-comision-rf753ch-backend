@@ -6,6 +6,7 @@ import {
   updateUser,
   validate,
 } from "../controllers/userController.js";
+import { verifyTokenMiddleware } from "../middlewares/verifyTokenMiddleware.js";
 
 //Crear enrutador
 //Enrutador, controla un conjunto de rutas
@@ -18,10 +19,10 @@ const userRoute = express.Router();
 //Endpoints
 //Ruta de creacion con post
 userRoute.post("/create", createUser);
-userRoute.get("/get", getUsers);
+userRoute.get("/get", verifyTokenMiddleware, getUsers);
 //Definimos path param con ":id"
-userRoute.delete("/delete/:id", deleteUser);
-userRoute.put("/update/:id", updateUser);
+userRoute.delete("/delete/:id", verifyTokenMiddleware ,deleteUser);
+userRoute.put("/update/:id", verifyTokenMiddleware, updateUser);
 userRoute.post("/login", validate)
 
 export default userRoute;
