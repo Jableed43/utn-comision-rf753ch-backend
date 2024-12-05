@@ -93,25 +93,39 @@ export const updateUser = async (req, res) => {
 };
 
 export const validate = async (req, res) => {
+
   try {
+    //Validamos que esten ambos campos necesarios
+    if(!(req.body.email && req.body.password)){
+      return res.status(400).json({message: "There's a missing field"})
+    }
+
     const userFound = await User.findOne({ email: req.body.email })
 
     if(!userFound){
       res.status(400).json({ message: "User or password is incorrect" })  
     }
 
+    console.log({userFound})
+
+
     //Comparar la password que llega del body contra la guardada en la db
    if(bcrypt.compareSync(req.body.password, userFound.password)){
 
+    //payload es la informacion que le cargamos al token
     const payload = {
       userId: userFound._id,
       userEmail: userFound.email
     }
 
+    //el token para tener validez debe ser firmado
     //sign necesita: 1. payload, 2. "secret", 3. duracion
     const token = jwt.sign(payload, "secret", { expiresIn: "1h" })
 
-    req.session.token = token;
+    console.log({token})
+
+    // genera una sesion en el backend para manejar el token
+    // req.session.token = token;
     
      return res.status(200).json({ message: "Logged in", token })
    } else {

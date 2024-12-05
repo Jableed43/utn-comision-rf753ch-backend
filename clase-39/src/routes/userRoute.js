@@ -19,7 +19,7 @@ const userRoute = express.Router();
 //Endpoints
 //Ruta de creacion con post
 userRoute.post("/create", createUser);
-userRoute.get("/get", verifyTokenMiddleware, getUsers);
+userRoute.get("/get", getUsers);
 //Definimos path param con ":id"
 userRoute.delete("/delete/:id", verifyTokenMiddleware ,deleteUser);
 userRoute.put("/update/:id", verifyTokenMiddleware, updateUser);
