@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 //Podes asignar en el required un mensaje de "error" para explicar porque el valor
 //Es invalido. Como segundo parametro el mensaje [true, "Name field is required"]
 
-const statusEnum = ["AVAILABLE", "NOT AVAILABLE", "DISCONTINUED"];
+export const statusEnum = ["AVAILABLE", "NOT AVAILABLE", "DISCONTINUED"];
 
 const productSchema = new mongoose.Schema({
   name: {

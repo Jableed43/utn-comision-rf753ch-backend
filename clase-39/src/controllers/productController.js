@@ -1,4 +1,4 @@
-import Product from "../models/productModel.js";
+import Product, { statusEnum } from "../models/productModel.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -95,5 +95,13 @@ export const deleteProduct = async (req, res) => {
     res.status(201).json({ message: "Product deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "internal server error", error });
+  }
+};
+
+export const getStatus = async (req, res) => {
+  try {
+    return res.status(200).json(statusEnum);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
