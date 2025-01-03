@@ -6,7 +6,7 @@ export const getProducts = async (req, res) => {
     //Para poder traer dichos datos debemos popular
     const products = await Product.find().populate("category");
     if (products.length === 0) {
-      return res.status(400).json({ message: "There are no products" });
+      return res.status(204).json({ message: "There are no products" });
     }
 
     return res.status(200).json(products);
