@@ -36,16 +36,20 @@ const productSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    quantity: Number,
-    status: {
-      type: String,
-      validate: {
-        validator: function (status) {
-          return statusEnum.includes(status);
-        },
-        message: props => `${props.value} it's not a valid status`,
+    validate: {
+      validator: function (status) {
+        return statusEnum.includes(status);
       },
+      message: props => `${props.value} is not a valid status`,
     },
+    required: true, // Opcional: asegura que el campo sea obligatorio
+    enum: statusEnum, // Validador nativo de Mongoose
+  },
+  
+  quantity: {
+    type: Number,
+    required: true, // Opcional: asegura que el campo sea obligatorio
+    min: 0, // Opcional: asegura que no sea un número negativo
   },
 
   category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },

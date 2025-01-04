@@ -1,4 +1,4 @@
-import User from "../models/userModel.js";
+import User, { rolesEnum } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -119,13 +119,14 @@ export const validate = async (req, res) => {
       // El token para tener validez debe ser firmado
       // sign necesita: 1. payload, 2. "secret", 3. duracion
       const token = jwt.sign(payload, "secret", { expiresIn: "1h" });
+      const role = userFound.role;
 
-      console.log({ token });
+      console.log({ token, role });
 
       // genera una sesion en el backend para manejar el token
       // req.session.token = token;
 
-      return res.status(200).json({ message: "Logged in", token });
+      return res.status(200).json({ message: "Logged in", token, role });
     } else {
       // Return immediately after sending the response
       return res.status(400).json({ message: "User or password is incorrect" });
@@ -133,5 +134,13 @@ export const validate = async (req, res) => {
 
   } catch (error) {
     return res.status(500).json({ error: "internal server error", error });
+  }
+};
+
+export const getRoles = async (req, res) => {
+  try {
+    return res.status(200).json(rolesEnum);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };

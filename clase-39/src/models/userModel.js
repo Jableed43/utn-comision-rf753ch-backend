@@ -4,6 +4,8 @@ import bcrypt from "bcrypt"
 
 //Faltaria encriptacion y categoria de usuario
 
+export const rolesEnum = ["ADMIN", "MERCHANT", "CLIENT"];
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -56,6 +58,18 @@ const userSchema = new mongoose.Schema({
       message:
         "Password must be between 6 and 12 characters, with at least one number, one upercase letter and one lowercase letter",
     },
+  },
+
+  role: {
+    type: String,
+    validate: {
+      validator: function (role) {
+        return rolesEnum.includes(role);
+      },
+      message: props => `${props.value} is not a valid role`,
+    },
+    required: true, // Opcional: asegura que el campo sea obligatorio
+    enum: rolesEnum, // Esto asegura que el valor esté dentro de los permitidos
   },
 });
 
