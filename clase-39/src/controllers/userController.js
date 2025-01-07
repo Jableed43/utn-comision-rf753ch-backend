@@ -121,12 +121,12 @@ export const validate = async (req, res) => {
       const token = jwt.sign(payload, "secret", { expiresIn: "1h" });
       const role = userFound.role;
 
-      console.log({ token, role });
+      console.log({ token, role, user: {id: userFound._id, email: userFound.email}  });
 
       // genera una sesion en el backend para manejar el token
       // req.session.token = token;
 
-      return res.status(200).json({ message: "Logged in", token, role });
+      return res.status(200).json({ message: "Logged in", token, role, user: {id: userFound._id, email: userFound.email} });
     } else {
       // Return immediately after sending the response
       return res.status(400).json({ message: "User or password is incorrect" });
