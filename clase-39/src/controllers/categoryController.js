@@ -1,44 +1,63 @@
-import Category from "../models/categoryModel.js";
+import {
+  getCategoriesService,
+  createCategoryService,
+  deleteCategoryService
+} from "../services/categoryService.js";
 
-//Ver de añadir varias category a la vez
+/**
+ * Controlador de categorías refactorizado para usar servicios
+ * TODO: Ver de añadir varias categorías a la vez
+ */
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
-    if (categories.length === 0) {
-      return res.status(204).json({ message: "There are no categories" });
-    }
+    const categories = await getCategoriesService();
     return res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    // Manejo de errores específicos del servicio
+    if (error.statusCode === 204) {
+      return res.status(204).json({ message: error.message });
+    }
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 
 export const createCategory = async (req, res) => {
   try {
     const name = req.body.name;
-    const categoryExist = await Category.findOne({ name });
-    if (categoryExist) {
-      return res.status(400).json({ message: "Category already exists" });
-    }
-    const newCategory = new Category({ name });
-    const response = await newCategory.save();
-    return res.status(201).json(response);
+    const savedCategory = await createCategoryService(name);
+    return res.status(201).json(savedCategory);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    // Manejo de errores específicos de Mongoose
+    if (error.code === 11000) {
+      // Error de duplicado (unique constraint)
+      const field = Object.keys(error.keyValue)[0];
+      const value = error.keyValue[field];
+      return res.status(400).json({ 
+        message: `Category with ${field}: ${value} already exists` 
+      });
+    }
+    if (error.name === "ValidationError") {
+      // Errores de validación de Mongoose
+      return res.status(400).json({ 
+        message: "Validation error", 
+        errors: error.message 
+      });
+    }
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 
 export const deleteCategory = async (req, res) => {
   try {
-    const _id = req.params.id;
-    const categoryExist = await Category.findOne({ _id });
-    if (!categoryExist) {
-      return res.status(400).json({ message: "Category does not exist" });
-    }
-    const response = await Category.findByIdAndDelete(_id);
-    return res.status(200).json(response);
+    const categoryId = req.params.id;
+    const deletedCategory = await deleteCategoryService(categoryId);
+    return res.status(200).json(deletedCategory);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    // Manejo de errores específicos del servicio
+    if (error.statusCode === 400) {
+      return res.status(400).json({ message: error.message });
+    }
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
